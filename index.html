@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Gia phả họ Đinh</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <!-- ===== LOGO TRÒN ===== -->
+            <div class="logo-container">
+                <div class="logo-ring">
+                    <img src="assets/logo.png" alt="Gia phả họ Đinh" class="logo-image" onerror="this.style.display='none'">
+                </div>
+            </div>
+            <h1><i class="fas fa-tree"></i> GIA PHẢ HỌ ĐINH <i class="fas fa-tree"></i></h1>
+            <p class="subtitle">Ông Đinh Minh Huân - Cúc Phương, Ninh Bình</p>
+            <div class="auto-save-status">
+                <i class="fas fa-save"></i>
+                <span>🕯️ Tự động thêm ngày giỗ khi có năm mất</span>
+                <span class="save-status" id="saveStatus">
+                    <i class="fas fa-check-circle" style="color:#4CAF50;"></i> Đã lưu
+                </span>
+            </div>
+        </header>
+
+        <!-- ===== THỐNG KÊ NHANH ===== -->
+        <div class="stats" id="stats">
+            <div class="stat-item">
+                <div class="stat-icon"><i class="fas fa-users"></i></div>
+                <div class="stat-info">
+                    <span class="stat-number" id="totalMembers">0</span>
+                    <span class="stat-label">Thành viên</span>
+                </div>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item stat-male">
+                <div class="stat-icon"><i class="fas fa-mars"></i></div>
+                <div class="stat-info">
+                    <span class="stat-number" id="totalMale">0</span>
+                    <span class="stat-label">Nam</span>
+                </div>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item stat-female">
+                <div class="stat-icon"><i class="fas fa-venus"></i></div>
+                <div class="stat-info">
+                    <span class="stat-number" id="totalFemale">0</span>
+                    <span class="stat-label">Nữ</span>
+                </div>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item stat-alive">
+                <div class="stat-icon"><i class="fas fa-heart"></i></div>
+                <div class="stat-info">
+                    <span class="stat-number" id="totalAlive">0</span>
+                    <span class="stat-label">Còn sống</span>
+                </div>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item stat-dead">
+                <div class="stat-icon"><i class="fas fa-skull"></i></div>
+                <div class="stat-info">
+                    <span class="stat-number" id="totalDead">0</span>
+                    <span class="stat-label">Đã mất</span>
+                </div>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item stat-generation">
+                <div class="stat-icon"><i class="fas fa-layer-group"></i></div>
+                <div class="stat-info">
+                    <span class="stat-number" id="totalGenerations">0</span>
+                    <span class="stat-label">Thế hệ</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Toolbar -->
+        <nav class="toolbar">
+            <div class="toolbar-group">
+                <button id="zoomInBtn"><i class="fas fa-search-plus"></i> Phóng to</button>
+                <button id="zoomOutBtn"><i class="fas fa-search-minus"></i> Thu nhỏ</button>
+                <button id="resetZoomBtn" class="reset-btn"><i class="fas fa-undo-alt"></i> Đặt lại</button>
+                <span class="zoom-value" id="zoomValue">100%</span>
+            </div>
+            <div class="toolbar-divider"></div>
+            <div class="toolbar-group">
+                <button id="addMemberBtn" class="add-btn"><i class="fas fa-plus-circle"></i> Thêm thành viên</button>
+                <button id="autoAddBtn" class="auto-btn"><i class="fas fa-magic"></i> Thêm tự động</button>
+                <button id="exportDataBtn" class="export-btn"><i class="fas fa-download"></i> Xuất data.js</button>
+                <button id="importDataBtn" class="import-btn"><i class="fas fa-upload"></i> Nhập data.js</button>
+                <input type="file" id="importFile" accept=".js,.json" style="display:none">
+            </div>
+        </nav>
+
+        <!-- Legend -->
+        <div class="legend">
+            <span class="legend-item"><i class="fas fa-user-circle" style="color:#4CAF50;"></i> Còn sống</span>
+            <span class="legend-item"><i class="fas fa-memory" style="color:#9E9E9E;"></i> Đã qua đời</span>
+            <span class="legend-item"><i class="fas fa-star-of-life" style="color:#FF9800;"></i> Bản thân</span>
+            <span class="legend-item"><i class="fas fa-crown" style="color:#8B4513;"></i> Trưởng họ</span>
+            <span class="legend-item"><i class="fas fa-mouse-pointer" style="color:#2196F3;"></i> Click tên để sửa</span>
+            <span class="legend-item"><i class="fas fa-candle" style="color:#d4a574;"></i> Tự động thêm ngày giỗ</span>
+        </div>
+
+        <div class="scroll-hint">
+            <i class="fas fa-mouse-pointer"></i> Ctrl + Cuộn chuột để zoom | <i class="fas fa-edit"></i> <strong>Click vào tên để chỉnh sửa</strong>
+        </div>
+
+        <!-- Tree -->
+        <div class="zoom-container" id="zoomContainer">
+            <div class="tree-wrapper" id="treeWrapper">
+                <div class="tree" id="tree"></div>
+            </div>
+        </div>
+
+        <!-- Memorials -->
+        <section class="memorials" id="memorials"></section>
+
+        <footer>
+            <i class="fas fa-info-circle"></i> Sửa <strong>js/data.js</strong> hoặc click tên để chỉnh sửa trực tiếp | 
+            <i class="fas fa-save" style="color:#2e7d32;"></i> <strong style="color:#2e7d32;">Tự động lưu vào bộ nhớ</strong> | 
+            <i class="fas fa-candle" style="color:#d4a574;"></i> <strong style="color:#d4a574;">Tự động thêm ngày giỗ</strong>
+        </footer>
+    </div>
+
+    <!-- Modal chỉnh sửa -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-user-edit"></i> Chỉnh sửa</h3>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="editForm">
+                    <input type="hidden" id="editId">
+                    <div class="form-group">
+                        <label><i class="fas fa-user"></i> Họ tên</label>
+                        <input type="text" id="editTen" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label><i class="fas fa-calendar-alt"></i> Năm sinh</label>
+                            <input type="number" id="editNamSinh" required>
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-skull"></i> Năm mất <span class="hint">(để trống nếu sống)</span></label>
+                            <input type="number" id="editNamMat" placeholder="Để trống nếu sống">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-venus-mars"></i> Giới tính</label>
+                        <select id="editGioiTinh">
+                            <option value="Nam">👨 Nam</option>
+                            <option value="Nữ">👩 Nữ</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-map-marker-alt"></i> Quê quán</label>
+                        <input type="text" id="editQueQuan">
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-tag"></i> Chức danh</label>
+                        <select id="editVaiTro">
+                            <option value="Trưởng tộc">👑 Trưởng tộc</option>
+                            <option value="Con trai trưởng">🔷 Con trai trưởng</option>
+                            <option value="Con trai">👦 Con trai</option>
+                            <option value="Con gái">👧 Con gái</option>
+                            <option value="Con dâu">👰 Con dâu</option>
+                            <option value="Con rể">🤵 Con rể</option>
+                            <option value="Cháu nội">👶 Cháu nội</option>
+                            <option value="Cháu ngoại">👶 Cháu ngoại</option>
+                            <option value="Vợ/Chồng">💑 Vợ/Chồng</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-heart"></i> ID vợ/chồng</label>
+                        <input type="text" id="editVoChongIds" placeholder="VD: 1,2">
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-father"></i> ID cha/mẹ</label>
+                        <input type="text" id="editChaMeIds" placeholder="VD: 1,2">
+                    </div>
+                    <div class="form-group checkbox">
+                        <label><input type="checkbox" id="editIsSelf"> <i class="fas fa-star-of-life"></i> Bản thân</label>
+                    </div>
+                    <div class="form-group auto-gen-info" style="background:#fef5e8;border:1px solid #d4a574;">
+                        <i class="fas fa-candle" style="color:#d4a574;"></i> 
+                        <span style="color:#8b4513;">💡 Nếu có năm mất, ngày giỗ sẽ được tự động thêm</span>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-delete" id="deleteMember"><i class="fas fa-trash-alt"></i> Xóa</button>
+                <button class="btn-cancel" id="cancelEdit"><i class="fas fa-times"></i> Hủy</button>
+                <button class="btn-save" id="saveEdit"><i class="fas fa-save"></i> Lưu</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal thêm thành viên -->
+    <div id="addModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-plus-circle"></i> Thêm thành viên</h3>
+                <span class="close-add">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="addForm">
+                    <div class="form-group">
+                        <label><i class="fas fa-user"></i> Họ tên</label>
+                        <input type="text" id="addTen" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label><i class="fas fa-calendar-alt"></i> Năm sinh</label>
+                            <input type="number" id="addNamSinh" required>
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-skull"></i> Năm mất <span class="hint">(để trống nếu sống)</span></label>
+                            <input type="number" id="addNamMat" placeholder="Để trống nếu sống">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-venus-mars"></i> Giới tính</label>
+                        <select id="addGioiTinh">
+                            <option value="Nam">👨 Nam</option>
+                            <option value="Nữ">👩 Nữ</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-map-marker-alt"></i> Quê quán</label>
+                        <input type="text" id="addQueQuan">
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-tag"></i> Chức danh</label>
+                        <select id="addVaiTro">
+                            <option value="Con trai">👦 Con trai</option>
+                            <option value="Con gái">👧 Con gái</option>
+                            <option value="Con dâu">👰 Con dâu</option>
+                            <option value="Con rể">🤵 Con rể</option>
+                            <option value="Cháu nội">👶 Cháu nội</option>
+                            <option value="Cháu ngoại">👶 Cháu ngoại</option>
+                            <option value="Trưởng tộc">👑 Trưởng tộc</option>
+                            <option value="Con trai trưởng">🔷 Con trai trưởng</option>
+                            <option value="Vợ/Chồng">💑 Vợ/Chồng</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-father"></i> ID cha/mẹ <span class="hint">(để trống là đời 1)</span></label>
+                        <input type="text" id="addChaMeIds" placeholder="VD: 1,2">
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-heart"></i> ID vợ/chồng <span class="hint">(có thể để trống)</span></label>
+                        <input type="text" id="addVoChongIds" placeholder="VD: 1">
+                    </div>
+                    <div class="form-group checkbox">
+                        <label><input type="checkbox" id="addIsSelf"> <i class="fas fa-star-of-life"></i> Bản thân</label>
+                    </div>
+                    <div class="form-group auto-gen-info">
+                        <i class="fas fa-magic"></i> <span id="autoGenInfo">Thế hệ sẽ được tự động tính toán</span>
+                    </div>
+                    <div class="form-group auto-gen-info" style="background:#fef5e8;border:1px solid #d4a574;margin-top:8px;">
+                        <i class="fas fa-candle" style="color:#d4a574;"></i> 
+                        <span style="color:#8b4513;">💡 Nếu có năm mất, ngày giỗ sẽ được tự động thêm</span>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancel" id="cancelAdd"><i class="fas fa-times"></i> Hủy</button>
+                <button class="btn-save" id="saveAdd"><i class="fas fa-plus"></i> Thêm</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/data.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
